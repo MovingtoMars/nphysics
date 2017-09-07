@@ -30,9 +30,9 @@ impl<N: Real> Fixed<N> {
         self.up_to_date = true
     }
 
-    /// Sets the the second anchor position.
+    /// Sets the the first anchor position.
     ///
-    /// The position is expressed in the second attached body’s local coordinates.
+    /// The position is expressed in the first attached body’s local coordinates.
     pub fn set_local1(&mut self, local1: Isometry<N>) {
         if local1 != self.anchor1.position {
             self.up_to_date = false;
