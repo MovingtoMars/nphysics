@@ -23,7 +23,12 @@ rustc-serialize = "0.3"
 num-traits = "0.1"
 alga       = "0.5"
 nalgebra   = "0.13"
-ncollide   = "0.13"
+# ncollide   = "0.13"
+
+[dependencies.ncollide]
+git = "https://github.com/MovingtoMars/ncollide.git"
+# [patch.crates-io]
+# ncollide = { git = 'https://github.com/MovingtoMars/ncollide.git' }
 
 [dev-dependencies]
 approx     = "0.1"

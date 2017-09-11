@@ -189,6 +189,12 @@ impl<N: Real> World<N> {
         collector.clear();
     }
 
+    pub fn update_rigid_body_collision_groups(&mut self, rb: RigidBodyHandle<N>) {
+        // let rb = rb.borrow();
+        let groups = rb.borrow().collision_groups().as_collision_groups().clone();
+        self.cworld.set_collision_groups(WorldObject::rigid_body_uid(&rb), groups)
+    }
+
     /// Adds a rigid body to the physics world.
     pub fn add_rigid_body(&mut self, rb: RigidBody<N>) -> RigidBodyHandle<N> {
         let position = rb.position().clone();
