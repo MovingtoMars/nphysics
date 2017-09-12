@@ -154,27 +154,9 @@ impl<N: Real> JointManager<N> {
     pub fn remove(&mut self, b: &Rc<RefCell<RigidBody<N>>>, activation: &mut ActivationManager<N>) {
         for joints in self.body2joints.get_and_remove(&(&**b as *const RefCell<RigidBody<N>> as usize)).iter() {
             for joint in joints.value.iter() {
-                fn do_remove<N: Real, T: Joint<N, M>, M>(_self:      &mut JointManager<N>,
-                                                         joint:      &Rc<RefCell<T>>,
-                                                         b:          &Rc<RefCell<RigidBody<N>>>,
-                                                         activation: &mut ActivationManager<N>) {
-                    let bj    = joint.borrow();
-                    let body1 = bj.anchor1().body.as_ref();
-                    let body2 = bj.anchor2().body.as_ref();
-
-                    for body in bj.anchor1().body.as_ref().iter() {
-                        if &**(*body) as *const RefCell<RigidBody<N>> == &**b as *const RefCell<RigidBody<N>> {
-                            _self.remove_joint_for_body(joint, body2, activation);
-                        }
-                        else {
-                            _self.remove_joint_for_body(joint, body1, activation);
-                        }
-                    }
-                }
-
                 match *joint {
-                    Constraint::BallInSocket(ref bis) => do_remove(self, bis, b, activation),
-                    Constraint::Fixed(ref f)          => do_remove(self, f, b, activation),
+                    Constraint::BallInSocket(ref bis) => self.remove_joint(bis, activation),
+                    Constraint::Fixed(ref f) => self.remove_joint(f, activation),
                     Constraint::RBRB(_, _, _) => panic!("Internal error: a contact RBRB should not be here.")
                 }
             }
@@ -217,7 +199,7 @@ impl<N: Real> JointManager<N> {
                     }
                 },
                 Constraint::RBRB(_, _, _) => panic!("Internal error: a contact RBRB should not be here.")
- 
+
             }
         }
     }
